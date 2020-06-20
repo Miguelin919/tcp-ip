@@ -5,7 +5,7 @@ nav_order: 35
 permalink: /control-de-flujo
 ---
 ##### **Autores:**
-{: .no_toc }
+Miguel Lemus
 
 
 ##### **Fecha de creación:** 
@@ -18,27 +18,55 @@ permalink: /control-de-flujo
 {: .no_toc }
 
 # TÍTULO
-{: .no_toc }
+Control de Flujo en TCP
 
 #### Contenido:
-{: .no_toc }
-
-1. TOC
-{:toc}
-
----
-
+  * Introducción
+  * Control de flujo
+  * Formato del segmento TCP
 
 ## Resumen
-La tabla de contenido se crea automáticamente con los títulos y subtítulos de su página.
-Debe agregar los títulos y subtítulos necesarios. Tome como ejemplo las otras páginas del sitio.
-(Recuerde eliminar este texto)
+Con el protocolo TCP, en la capa de transporte, sus objetivos es transferir paquetes con un cierto orden utilizando el control de flujo con un mecanismo de confirmaciones, se numeran los byte para confirmar con los SYNs establecen los números de secuencia iniciales 
 
 
 ## TÍTULO
-Create model object and add values to it and `save()` the model. After saving model **model id** and 
-**model key** is attached with model object.
+Control de Flujo en TCP
 
 ## SUBTÍTULO
-Create model object and add values to it and `save()` the model. After saving model **model id** and 
-**model key** is attached with model object. Esta es una prueba
+Introducción
+Transferencia fiable de datos: importante en nivel de aplicación, tansporte, enlace.
+           | Aplicación |                     | Aplicación |
+----------------------------------------------------------------------------------------
+Transporte        |   --->  | Canal fiable | --->   |
+----------------------------------------------------------------------------------------
+El control de flujo utiliza el mecanismo de confirmaciones
+    1 | -----> | 
+      | Datos  | 1
+    2 | <----- |
+      |   ACK  | 2
+    3 | -----> |
+      | Datos  | 3
+    4 | <----- |
+      |   ACK  | 4
+      
+Control de flujo 
+Receptor lee más despacio que lo que recibe (. . .)
+
+Segmento TCP
+  __________________________________________
+  |<--------------32 bits----------------->|
+  |   Puerto origen  | Puerto destino      |
+  |         Número de secuencia            |  <-- Cuenta en bytes de datos (no en segmentos)
+  |        Número de confirmación          |  <-- Cuenta en bytes de datos (no en segmentos)  
+  |Long Cab.|No usado|U|A|P|R|S|F|Ventana  |
+  | Checksum         | Puntero a urgentes  |
+  |     Opciones (longitud variable)       |
+  | Datos de aplicación (Longitud variable)|
+  
+Long Cab: Tamaño cabecera (palabras de 32bits)
+U: Datos urgentes (casi no se usa), URG.
+A: El No. ACK es valido
+P: Pysh Entregar datos a App (PSH)
+R: RST S: SYN F:FIN Establecimiento y fin de la conexión
+Ventana: Tamaño de la ventana que se anuncia al emisor
+Checksum
